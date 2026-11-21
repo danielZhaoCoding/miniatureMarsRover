@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--Sets up header, title, stylesheet-->
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <script>console.log("Testing")</script>
+
+    <script src="{{ url_for('static', filename='writeLog.js')}}"></script>
+    <script>document.addEventListener("DOMContentLoaded", loginLogger)</script>
+    <script>document.addEventListener("DOMContentLoaded", function () { const inputs = document.querySelectorAll('input'); inputs.forEach(input => { input.value = sessionStorage.getItem("username"); }); console.log("Got username.")});</script>
+
+  </head>
+  <body>
+  <!--A little bit of JS to post alerts-->
+  {% if message %}
+  <script>
+    alert("{{ message }}");
+  </script>
+  {% endif %}
+
+    <!--Live feed from camera 1 on the Pi, served by video_recieve.py-->
+    <div class="quadrant top-left">
+        <div class="video">
+            <img src="/video_feed/1" alt="Waiting for camera 1...">
+        </div>
+    </div>
+
+    <!--Quadrant for the inputs-->
+    <div class="quadrant top-right">
+        <div class="controls">
+            <!--Up button connected to the /up request-->
+            <form action="/up" method="post" class="move-up">
+                <input type="hidden" name="username">
+                <button type="submit">▲</button>
+            </form>
+
+            <!--Left button connected to the /left request-->
+            <form action="/left" method="post" class="move-left">
+                <input type="hidden" name="username">
+                <button type="submit">◄</button>
+            </form>
+
+            <!--PLay button connected to the /play request-->
+            <form action="/play" method="post" class="start">
+                <input type="hidden" name="username">
+                <button type="submit">▶</button>
+            </form>
+
+            <!--Stop button connected to the /stop request-->
+            <form action="/stop" method="post" class="stop">
+                <input type="hidden" name="username">
+                <button type="submit">■</button>
+            </form>
+
+            <!--Right button connected to the /right request-->
+            <form action="/right" method="post" class="move-right">
+                <input type="hidden" name="username">
+                <button type="submit">►</button>
+            </form>
+
+            <!--Down button connected to the /down request-->
+            <form action="/down" method="post" class="move-down">
+                <input type="hidden" name="username">
+                <button type="submit">▼</button>
+            </form>
+        </div>
+    </div>
+
+    <!--Live feed from camera 2 on the Pi, served by video_recieve.py-->
+    <div class="quadrant bottom-left">
+        <div class="video">
+            <img src="/video_feed/2" alt="Waiting for camera 2...">
+        </div>
+    </div>
+
+    <!--Quadrant with user log-->
+    <div class="quadrant bottom-right">
+        <div class="user-log-title">User Log</div>
+        <div id="user-log" style="white-space: pre-wrap; padding: 40px;"></div>
+    </div>
+
+  </body>
+  <script src="{{ url_for('static', filename='showLog.js')}}"></script>
+  <script>document.querySelectorAll("input").forEach(input => {input.value = sessionStorage.getItem("username");}); //username sending</script>
+</html>
